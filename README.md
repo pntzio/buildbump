@@ -25,5 +25,5 @@ When the `-s` or `--silent` option is set, the utility generates no output at al
 
  - Recursive search for the specified file
  - More verbose output
- - Option for specifying how much to increment version number
+ - ~~Option for specifying how much to increment version number~~
  - Clean up output-related code
