@@ -33,9 +33,14 @@ int main(int argc, char** argv)
     QCommandLineOption silentOption(QStringList() << "s" << "silent",
                                     QCoreApplication::translate("main", "Silent mode"));
 
+    QCommandLineOption numberOption(QStringList() << "n",
+                                    QCoreApplication::translate("main", "Bump version by <value>"),
+                                    QCoreApplication::translate("main", "value"));
+
     parser.addVersionOption();
     parser.addHelpOption();
     parser.addOption(fileOption);
+    parser.addOption(numberOption);
     parser.addOption(patternOption);
     parser.addOption(silentOption);
     parser.process(app);
@@ -43,6 +48,20 @@ int main(int argc, char** argv)
     QString filename = parser.isSet(fileOption) ? parser.value(fileOption) : "version.h";
     QRegExp expression(parser.isSet(patternOption) ? parser.value(patternOption) : "(.*VER_BUILD\\s+)(\\d+)");
     logEnabled = parser.isSet(silentOption) == false;
+
+    // Try to parse '-n' parameter value
+    qint32 bumpNumber = 1;
+    if(parser.isSet(numberOption)) {
+        bool conversionOk = false;
+        qint32 numberTemp = parser.value(numberOption).toInt(&conversionOk);
+        if(conversionOk == false) {
+            BBERR("Failed to parse value of '-n' parameter");
+            return 4;
+        }
+        else {
+            bumpNumber = numberTemp;
+        }
+    }
 
     // 1. Open file for reading
     QFile versionFile(filename);
@@ -66,7 +85,7 @@ int main(int argc, char** argv)
     for(qint32 i = 0; i < fileContents.length(); ++i) {
         QString line = fileContents.at(i);
         if(line.contains(expression)) {
-            qint32 newVersion = expression.cap(2).toInt() + 1;
+            qint32 newVersion = expression.cap(2).toInt() + bumpNumber;
             line = line.replace(expression, QString("\\1%1").arg(newVersion));
             fileContents.replace(i, line);
             rowsAffected++;
