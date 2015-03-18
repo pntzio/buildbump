@@ -20,6 +20,7 @@ When the `-s` or `--silent` option is set, the utility generates no output at al
 | 1            | Failed to open file for reading  |
 | 2            | Failed to open file for writing  |
 | 3            | No rows affected                 |
+| 4            | Other error                      |
 
 ##Features to be added
 
