@@ -6,7 +6,9 @@ Utility for bumbing build version before compiling an application or library
 With the `-f <file>` or `--file <file>` option, you can specify which file to perform bumping on. If this option is left out, the utility will look for `version.h` in the current working directory.
 ###Regular expressions
 With the `-p <pattern>` or `--pattern <pattern>` option, you can specify a regular expression to match when looking for the build version.
+
 The default expression is `(.*VER_BUILD\s+)(\d+)` ([Example matches](http://www.regexr.com/3akkd))
+
 **Notice** how there are **two** captures in the expression. The first one is the entire line before the actual build number, and the second is for the build number itself. This criteria must always be met, or else the utility won't be able to replace text correctly.
 ###Silence!
 When the `-s` or `--silent` option is set, the utility generates no output at all.
